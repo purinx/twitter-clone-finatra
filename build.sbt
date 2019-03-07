@@ -11,7 +11,8 @@ lazy val dervy = {
     "com.twitter" %% "finatra-http" % "19.2.0",
     "mysql" % "mysql-connector-java" % "5.1.38",
     "io.getquill" %% "quill-jdbc" % "3.0.1",
-    "com.typesafe" % "config" % "1.3.2"
+    "com.typesafe" % "config" % "1.3.2",
+    "org.slf4j" % "slf4j-simple" % "1.6.4"
   )
 }
 

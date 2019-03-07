@@ -3,15 +3,20 @@ package Controller
 import Dao.TweetDao
 import io.getquill.{MysqlJdbcContext, SnakeCase}
 import com.twitter.finatra.http.Controller
-import com.twitter.finagle.Http
-import com.twitter.finagle.http.Request
+import com.twitter.finatra.request.QueryParam
+import com.twitter.util.Future
 
-class TweetSearchController extends Controller{
+class TweetSearchController extends Controller {
 
   lazy val ctx = new MysqlJdbcContext(SnakeCase, "ctx")
-  val tweetDao:TweetDao = new TweetDao(ctx)
+  val tweetDao: TweetDao = new TweetDao(ctx)
 
-  get("/tweet") {request:Request =>
-    "実装中"
+  case class TweetsRequest(@QueryParam from: Int,
+                           @QueryParam to: Int)
+  get("/tweets") { request: TweetsRequest =>
+    Future {
+      (request.from to request.to)
+        .map(i => tweetDao.findById(i).get)
+    }
   }
 }

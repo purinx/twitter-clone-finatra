@@ -1,22 +1,23 @@
 import com.twitter.finagle.Http
-import com.twitter.finagle.http.Request
+import com.twitter.finagle.http.{Request, Response}
 import com.twitter.finagle.stats.NullStatsReceiver
 import com.twitter.finagle.tracing.NullTracer
-import com.twitter.finatra.http.filters.HttpResponseFilter
+import com.twitter.finatra.http.filters.{CommonFilters, HttpResponseFilter, LoggingMDCFilter}
 import com.twitter.finatra.http.routing.HttpRouter
 import com.twitter.finatra.http.{Controller, HttpServer}
 import Config._
-import Controller.TweetSearchController
-import Controller.UserManageController
+import _root_.Controller.TweetSearchController
+import _root_.Controller.UserManageController
 
 object Main extends TwitterCloneServer
 
 class TwitterCloneServer extends HttpServer {
   // 色々な設定項目はBaseHttpServerを参照
   override def defaultHttpPort: String = conf.getString("port")
+
   override def defaultHttpServerName: String = conf.getString("host")
 
-  override def configureHttpServer(server: Http.Server):Http.Server = {
+  override def configureHttpServer(server: Http.Server): Http.Server = {
     server
       .withCompressionLevel(0)
       .withStatsReceiver(NullStatsReceiver)
@@ -25,8 +26,8 @@ class TwitterCloneServer extends HttpServer {
 
   override def configureHttp(router: HttpRouter): Unit = {
     router
-      .filter[HttpResponseFilter[Request]]
-      .add[HomeController]
+      .filter[LoggingMDCFilter[Request, Response]]
+      .filter[CommonFilters]
       .add[UserManageController]
       .add[TweetSearchController]
   }
