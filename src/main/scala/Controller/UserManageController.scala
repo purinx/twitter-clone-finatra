@@ -7,7 +7,7 @@ import io.getquill.{MysqlJdbcContext, SnakeCase}
 
 class UserManageController extends Controller {
   lazy val ctx = new MysqlJdbcContext(SnakeCase, "ctx")
-  val userDao: UserDao = new UserDao(ctx)
+  val userDao: UserDao = new UserDao
 
   get("/users") { request: Request =>
     userDao.getAll

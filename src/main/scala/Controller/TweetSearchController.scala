@@ -1,22 +1,22 @@
 package Controller
 
 import Dao.TweetDao
-import io.getquill.{MysqlJdbcContext, SnakeCase}
+import com.twitter.finagle.http.Request
 import com.twitter.finatra.http.Controller
-import com.twitter.finatra.request.QueryParam
-import com.twitter.util.Future
 
 class TweetSearchController extends Controller {
+  lazy val tweetDao = new TweetDao
 
-  lazy val ctx = new MysqlJdbcContext(SnakeCase, "ctx")
-  val tweetDao: TweetDao = new TweetDao(ctx)
+   get("/tweet/:id") { request: Request =>
+     val id = request.getIntParam("id")
+      tweetDao.findById(id)
+        .getOrElse(s"Tweet id: ${id} not exists")
+  }
 
-  case class TweetsRequest(@QueryParam from: Int,
-                           @QueryParam to: Int)
-  get("/tweets") { request: TweetsRequest =>
-    Future {
-      (request.from to request.to)
-        .map(i => tweetDao.findById(i).get)
-    }
+  get("/tweets/:number"){ request: Request =>
+    val number = request.getIntParam("number")
+    (1 to number).map(
+      i=> tweetDao.findById(i).getOrElse(s"tweet id:${i} not exists")
+    )
   }
 }

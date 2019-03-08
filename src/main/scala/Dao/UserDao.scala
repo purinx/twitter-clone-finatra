@@ -4,7 +4,11 @@ import Model.User
 import io.getquill.{MysqlJdbcContext, SnakeCase}
 import com.twitter.util.Future
 
-class UserDao(ctx: MysqlJdbcContext[SnakeCase.type]) {
+class UserDao {
+
+  //コンテキスト生成
+  lazy val ctx: MysqlJdbcContext[SnakeCase.type] =
+    new MysqlJdbcContext(SnakeCase, "ctx")
 
   import ctx._
 
@@ -21,16 +25,21 @@ class UserDao(ctx: MysqlJdbcContext[SnakeCase.type]) {
   //}
 
 
-  //lazy val model = query[User]
-
-  def create(name: String, email: String, password: String)
-  : Long = {
+  def findById(id: Long): Option[User] = {
     val q = quote{
+      query[User].filter(_.id==lift(id)).take(1)
+    }
+    ctx.run(q).headOption
+  }
+
+  def create(name: String, email: String, password: String): Long = {
+    val q = quote {
       query[User].insert(
-      _.name -> lift(name),
-      _.email -> lift(email),
-      _.password -> lift(password),
-    )}
+        _.name -> lift(name),
+        _.email -> lift(email),
+        _.password -> lift(password),
+      )
+    }
     ctx.run(q)
   }
 

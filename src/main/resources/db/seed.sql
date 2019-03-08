@@ -78,3 +78,36 @@ insert into tweet3(content,liked,retweeted,timestamp) values
 
 insert into tweet(user_id,is_private,text,content,liked,retweeted,timestamp)
 select A.*, B.* from tweet1 A join tweet2 B;
+
+drop table if exists follow1;
+create table follow1(
+  `user_id` int not null
+);
+
+insert into follow1(user_id) values
+(1),
+(2),
+(3),
+(4),
+(5),
+(6),
+(7),
+(8),
+(9),
+(10);
+
+drop table if exists follow2;
+create table follow2(
+  `followed` int not null
+);
+
+insert into follow2(followed) values
+(1),
+(3),
+(4),
+(5),
+(6),
+(9);
+
+insert into follow(user_id, followed)
+select A.*, B.* from follow1 A join follow2 B;

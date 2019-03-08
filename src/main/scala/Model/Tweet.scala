@@ -9,5 +9,5 @@ case class Tweet(
                   content: String,
                   liked: Long,
                   retweeted: Long,
-                  timestamp: Long
+                  timestamp: String
                 )

@@ -2,16 +2,16 @@ import com.twitter.finagle.Http
 import com.twitter.finagle.http.{Request, Response}
 import com.twitter.finagle.stats.NullStatsReceiver
 import com.twitter.finagle.tracing.NullTracer
-import com.twitter.finatra.http.filters.{CommonFilters, HttpResponseFilter, LoggingMDCFilter}
+import com.twitter.finatra.http.filters.{CommonFilters, LoggingMDCFilter}
 import com.twitter.finatra.http.routing.HttpRouter
 import com.twitter.finatra.http.{Controller, HttpServer}
 import Config._
-import _root_.Controller.TweetSearchController
-import _root_.Controller.UserManageController
+import _root_.Controller.{TimelineController, TweetSearchController, UserManageController, UserTweetController}
 
 object Main extends TwitterCloneServer
 
 class TwitterCloneServer extends HttpServer {
+
   // 色々な設定項目はBaseHttpServerを参照
   override def defaultHttpPort: String = conf.getString("port")
 
@@ -30,6 +30,8 @@ class TwitterCloneServer extends HttpServer {
       .filter[CommonFilters]
       .add[UserManageController]
       .add[TweetSearchController]
+      .add[TimelineController]
+      .add[UserTweetController]
   }
 }
 
