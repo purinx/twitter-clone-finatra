@@ -27,6 +27,7 @@ class TwitterCloneServer extends HttpServer {
   override def configureHttp(router: HttpRouter): Unit = {
     router
       .filter[LoggingMDCFilter[Request, Response]]
+      .filter[CorsFilter]
       .filter[CommonFilters]
       .add[UserManageController]
       .add[TweetSearchController]
