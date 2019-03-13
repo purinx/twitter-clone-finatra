@@ -2,4 +2,4 @@ project/
 .idea/
 target/
 application.properties
-
+node_modules

@@ -6,7 +6,7 @@ import com.twitter.finatra.http.filters.{CommonFilters, LoggingMDCFilter}
 import com.twitter.finatra.http.routing.HttpRouter
 import com.twitter.finatra.http.{Controller, HttpServer}
 import Config._
-import _root_.Controller.{TimelineController, TweetSearchController, UserManageController, UserTweetController}
+import _root_.Controller._
 
 object Main extends TwitterCloneServer
 
@@ -33,6 +33,7 @@ class TwitterCloneServer extends HttpServer {
       .add[TweetSearchController]
       .add[TimelineController]
       .add[UserTweetController]
+      .add[ApplicationController]
   }
 }
 
