@@ -7,7 +7,7 @@ class ApplicationController extends Controller {
 
   get("/app/:*"){request:Request =>
     response.ok.fileOrIndex(
-      request.params("*"),
-      "index.html")
+      "/app/"+request.params("*"),
+      "/app/index.html")
   }
 }

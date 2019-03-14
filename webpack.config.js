@@ -3,11 +3,11 @@ const path = require('path');
 module.exports = {
   mode: 'development',
   entry: {
-    app:'./app.js',
-    test:'./test/api.js'
+    home:'./home.js',
+    profile:'./profile'
   },
   output: {
-    path: path.resolve('dist'),
+    path: path.resolve('src/main/resources/dist'),
     filename: '[name].js'
   },
   module: {
