@@ -4,3 +4,5 @@ target/
 application.properties
 node_modules
 flow-typed
+js
+

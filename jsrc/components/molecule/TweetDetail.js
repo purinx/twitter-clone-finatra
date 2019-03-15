@@ -2,7 +2,7 @@
 
 import * as React from 'react';
 
-import type {TweetType, User} from './types';
+import type {TweetType, User} from '../types';
 
 type Props = {
   ...$Exact<TweetType>,

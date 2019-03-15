@@ -3,11 +3,11 @@ const path = require('path');
 module.exports = {
   mode: 'development',
   entry: {
-    home:'./home.js',
-    profile:'./profile'
+    home:'./jsrc/pages/home.js',
+    profile:'./jsrc/pages/profile.js'
   },
   output: {
-    path: path.resolve('src/main/resources/dist'),
+    path: path.resolve('src/main/resources/js'),
     filename: '[name].js'
   },
   module: {
@@ -35,4 +35,4 @@ module.exports = {
   devServer: {
     contentBase: './dist'
   }
-}
+};

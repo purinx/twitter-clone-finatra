@@ -16,7 +16,6 @@
     "@material-ui/styles": "^4.0.0-alpha.2",
     "babel-polyfill": "^6.26.0",
     "clsx": "^1.0.3",
-    "comma-number": "^2.0.0",
     "cors": "^2.8.5",
     "d3": "^3.5.17",
     "react": "^16.8.1",
