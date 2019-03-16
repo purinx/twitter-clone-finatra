@@ -47,17 +47,17 @@ create table follow(
   primary key(id)
 );
 
-create table likes(
+create table `likes`(
   `id` int auto_increment,
+  `tweet_id` int not null,
   `user_id` int not null,
-  `tweet` int not null,
   primary key(id)
 );
 
 create table retweet(
   `id` int auto_increment,
   `user_id` int not null,
-  `tweet` int not null,
+  `tweet_id` int not null,
   `timestamp` varchar(255),
   primary key(id)
 );

@@ -4,9 +4,9 @@ import com.twitter.finagle.stats.NullStatsReceiver
 import com.twitter.finagle.tracing.NullTracer
 import com.twitter.finatra.http.filters.{CommonFilters, LoggingMDCFilter}
 import com.twitter.finatra.http.routing.HttpRouter
-import com.twitter.finatra.http.{Controller, HttpServer}
+import com.twitter.finatra.http.HttpServer
 import Config._
-import _root_.Controller._
+import Controller._
 
 object Main extends TwitterCloneServer
 
@@ -29,23 +29,11 @@ class TwitterCloneServer extends HttpServer {
       .filter[LoggingMDCFilter[Request, Response]]
       .filter[CorsFilter]
       .filter[CommonFilters]
+      .add[TweetController]
       .add[UserManageController]
       .add[TweetSearchController]
       .add[TimelineController]
       .add[UserTweetController]
       .add[ApplicationController]
   }
-}
-
-class HomeController extends Controller {
-  private[this] val helloWorldResponseText = "Hello, World!"
-
-  get("/json") { request: Request =>
-    Map("message" -> "Hello, World!")
-  }
-
-  get("/plaintext") { request: Request =>
-    helloWorldResponseText
-  }
-
 }

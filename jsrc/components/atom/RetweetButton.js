@@ -3,7 +3,7 @@
 import * as React from 'react';
 import IconButton from '@material-ui/core/IconButton';
 import SvgIcon from '@material-ui/core/SvgIcon';
-import {retweet} from "../../api/tweetAPI";
+import {like} from "../../api/tweetAPI";
 
 type Props = {
   id: number,
@@ -15,7 +15,7 @@ export default function LikeButton(props: Props) {
   const {id, userId} = props;
 
   const onClick = () => {
-    retweet(id, userId);
+    like(id, userId);
   };
 
   return (

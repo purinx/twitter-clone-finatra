@@ -1,6 +1,5 @@
 package Model
 
-
 case class Tweet(
                   id: Long,
                   userId: Long,
