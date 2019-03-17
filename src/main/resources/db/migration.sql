@@ -58,6 +58,6 @@ create table retweet(
   `id` int auto_increment,
   `user_id` int not null,
   `tweet_id` int not null,
-  `timestamp` varchar(255),
+  `timestamp` TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   primary key(id)
 );
