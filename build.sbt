@@ -15,7 +15,8 @@ lazy val dervy = {
     "io.getquill" %% "quill-jdbc" % "3.0.1",
     "com.typesafe" % "config" % "1.3.2",
     "org.slf4j" % "slf4j-simple" % "1.6.4",
-    "org.scala-lang" % "scala-compiler" % "2.12.8"
+    "org.scala-lang" % "scala-compiler" % "2.12.8",
+    "org.springframework.security" % "spring-security-web" % "4.1.3.RELEASE"
   )
 }
 

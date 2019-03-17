@@ -1,8 +1,8 @@
 {
-  "name": "react-template",
+  "name": "twitter-clone",
   "version": "1.0.0",
   "description": "",
-  "main": "main.js",
+  "main": "app.js",
   "keywords": [],
   "author": "",
   "license": "ISC",

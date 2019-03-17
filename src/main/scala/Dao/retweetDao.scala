@@ -2,7 +2,6 @@ package Dao
 
 import Model.Retweet
 import io.getquill._
-import java.util.Date
 
 class RetweetDao {
 

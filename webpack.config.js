@@ -3,7 +3,7 @@ const path = require('path');
 module.exports = {
   mode: 'development',
   entry: {
-    home:'./jsrc/pages/home.js',
+    home:'./jsrc/pages/Home.js',
     profile:'./jsrc/pages/profile.js'
   },
   output: {
@@ -33,6 +33,6 @@ module.exports = {
     ]
   },
   devServer: {
-    contentBase: './dist'
+    contentBase: './src/main/resources/js'
   }
 };

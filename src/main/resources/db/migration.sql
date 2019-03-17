@@ -13,7 +13,7 @@ create table tweet(
   `content` varchar(255) null,
   `liked` int default 0,
   `retweeted` int default 0,
-  `timestamp` timestamp,
+  `timestamp` timestamp DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   PRIMARY KEY(`id`)
 );
 
