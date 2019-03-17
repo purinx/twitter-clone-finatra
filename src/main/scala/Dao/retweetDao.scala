@@ -12,12 +12,11 @@ class RetweetDao {
   import ctx._
 
   def retweet(tweetId: Long, userId: Long) = {
-    val now = "%tY-%<tm-%<td %<tH:%<tM:%<tS"
     val q = quote {
       query[Retweet].insert(
         _.tweetId -> lift(tweetId),
-        _.userId -> lift(userId),
-        _.timestamp->lift(new Date))
+        _.userId -> lift(userId)
+      )
     }
     ctx.run(q)
   }
