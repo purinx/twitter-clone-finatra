@@ -1,1 +1,1 @@
-sbt run -http.port=:9000 -http.name=:localhost -doc.root=:/front
+sbt run -http.port=:9000 -http.name=:localhost
