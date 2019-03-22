@@ -5,8 +5,9 @@ import com.twitter.finagle.http.Request
 
 class ApplicationController extends Controller {
 
-  get("/app"){request:Request =>
-    response.ok.file(
+  get("/:*") { request: Request =>
+    response.ok.fileOrIndex(
+      request.params("*"),
       "index.html")
   }
 }

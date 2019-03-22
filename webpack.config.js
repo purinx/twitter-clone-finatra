@@ -3,11 +3,10 @@ const path = require('path');
 module.exports = {
   mode: 'development',
   entry: {
-    home:'./jsrc/pages/Home.js',
-    profile:'./jsrc/pages/profile.js'
+    app:'./jsrc/app.js',
   },
   output: {
-    path: path.resolve('src/main/resources/js'),
+    path: path.resolve('src/main/resources/view/js'),
     filename: '[name].js'
   },
   module: {
@@ -33,6 +32,6 @@ module.exports = {
     ]
   },
   devServer: {
-    contentBase: './src/main/resources/js'
+    contentBase: './src/main/resources/view/js'
   }
 };

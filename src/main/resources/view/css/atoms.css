@@ -1,0 +1,58 @@
+.box-center{
+  display: block;
+  margin: 0 auto;
+  width: 150px;
+}
+
+.text-center{
+  text-align: center;
+}
+
+.m-top-30{
+  margin-top: 30px;
+}
+
+.m-top-20{
+  margin-top: 20px;
+}
+
+.m-top-10{
+  margin-top: 10px;
+}
+
+.btn-blue{
+  display:block;
+  margin: 0 auto;
+  border-radius: 5px;
+  width: 70px;
+  height: 30px;
+  background-color: blue;
+  color: white;
+
+}
+
+.box-input{
+  margin-top: 30px;
+  text-align: right;
+  margin-right: 30%;
+}
+
+.inline-text{
+  display: inline;
+  margin-left: 30px;
+}
+
+input{
+  width: 200px;
+  font-size: 24px;
+  border-top: 0;
+  border-right: 0;
+  border-left: 0;
+  border-bottom: solid 1px;
+  border-bottom-color: gray;
+  outline: 0;
+}
+
+.focused{
+  border-bottom-color: rgb(129, 179, 245);
+}
