@@ -3,7 +3,9 @@ const path = require('path');
 module.exports = {
   mode: 'development',
   entry: {
-    app:'./jsrc/app.js',
+    signup: './jsrc/signup.js',
+    login: './jsrc/login.js',
+    app: './jsrc/app.js',
   },
   output: {
     path: path.resolve('src/main/resources/view/js'),

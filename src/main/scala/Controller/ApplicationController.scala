@@ -10,4 +10,16 @@ class ApplicationController extends Controller {
       request.params("*"),
       "index.html")
   }
+
+  get("/app") { request: Request =>
+    response.ok.file("index.html")
+  }
+
+  get("/login") { request: Request =>
+    response.ok.file("login.html")
+  }
+
+  get("/signup") { request: Request =>
+    response.ok.file("signup.html")
+  }
 }

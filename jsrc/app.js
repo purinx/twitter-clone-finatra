@@ -2,11 +2,25 @@
 
 import * as React from 'react';
 import * as ReactDOM from 'react-dom';
-import Signup from './js/components/pages/Signup';
+import { BrowserRouter as Router, Route, Link } from "react-router-dom";
+import Timeline from './js/components/pages/timeline';
 
 const appNode = document.getElementById("app");
 
 appNode && ReactDOM.render(
-  <Signup/>,
+  <Router>
+    <div>
+      <nav>
+        <ul>
+          <li>
+            <Link to="/timeline/">Timeline</Link>
+          </li>
+        </ul>
+      </nav>
+
+      <Route path="/timeline" component={Timeline} />
+
+    </div>
+  </Router>,
   appNode
 );

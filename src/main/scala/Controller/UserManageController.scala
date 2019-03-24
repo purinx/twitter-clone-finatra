@@ -1,6 +1,7 @@
 package Controller
 
 import Dao.{ProfileDao, UserDao}
+import Servise.UserService
 import com.twitter.finagle.http.Request
 import com.twitter.finatra.http.Controller
 import io.getquill.{MysqlJdbcContext, SnakeCase}
@@ -52,4 +53,14 @@ class UserManageController extends Controller {
       request.getParam("icon")
     )
   }
+
+  lazy val userService: UserService = new UserService
+  post("/user/login") { request: Request =>
+    userService.login(
+      request.getParam("id"),
+      request.getParam("password")
+    )
+  }
+
+
 }

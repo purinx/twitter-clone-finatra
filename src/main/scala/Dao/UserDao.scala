@@ -26,8 +26,8 @@ class UserDao {
 
 
   def findById(id: Long): Option[User] = {
-    val q = quote{
-      query[User].filter(_.id==lift(id)).take(1)
+    val q = quote {
+      query[User].filter(_.id == lift(id)).take(1)
     }
     ctx.run(q).headOption
   }
@@ -62,13 +62,11 @@ class UserDao {
     ctx.run(allQ)
   }
 
-  def findByName(name: String): Future[Option[User]] = {
-    Future {
-      ctx.run(
-        quote {
-          query[User].filter(_.name == lift(name)).take(1)
-        }
-      ).headOption
-    }
+  def findByName(name: String): Option[User] = {
+    ctx.run(
+      quote {
+        query[User].filter(_.name == lift(name)).take(1)
+      }
+    ).headOption
   }
 }
