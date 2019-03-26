@@ -1,27 +1,27 @@
-.box-center{
+.box-center {
   display: block;
   margin: 0 auto;
   width: 150px;
 }
 
-.text-center{
+.text-center {
   text-align: center;
 }
 
-.m-top-30{
+.m-top-30 {
   margin-top: 30px;
 }
 
-.m-top-20{
+.m-top-20 {
   margin-top: 20px;
 }
 
-.m-top-10{
+.m-top-10 {
   margin-top: 10px;
 }
 
-.btn-blue{
-  display:block;
+.btn-blue {
+  display: block;
   margin: 0 auto;
   border-radius: 5px;
   width: 70px;
@@ -31,18 +31,18 @@
 
 }
 
-.box-input{
+.box-input {
   margin-top: 30px;
   text-align: right;
   margin-right: 30%;
 }
 
-.inline-text{
+.inline-text {
   display: inline;
   margin-left: 30px;
 }
 
-input{
+input {
   width: 200px;
   font-size: 24px;
   border-top: 0;
@@ -53,6 +53,23 @@ input{
   outline: 0;
 }
 
-.focused{
+.focused {
   border-bottom-color: rgb(129, 179, 245);
+}
+
+img{
+  border: 0;
+}
+
+.avatar {
+  width: 48px;
+  height: 48px;
+  border-radius: 50%;
+}
+
+.tweet-header .avatar {
+  float: left;
+  margin-top: 3px;
+  margin-left: -58px;
+  position: absolute;
 }

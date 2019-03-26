@@ -8,7 +8,9 @@ drop table if exists retweet;
 create table tweet(
   `id` int not null auto_increment,
   `user_id` bigint not null,
-  `is_private` bool,
+  `user_name` varchar(255),
+  `user_subname` varchar(255),
+  `user_icon` varchar(255),
   `text` varchar(255),
   `content` varchar(255) null,
   `liked` int default 0,
@@ -28,7 +30,7 @@ create table user(
 
 CREATE TABLE profile (
   `user_id` int NOT NULL UNIQUE,
-  `called` VARCHAR(255) not null,
+  `subname` VARCHAR(255) not null,
   `bio` varchar(255),
   `icon` VARCHAR(255),
   `privacy` VARCHAR(45) default 'public',

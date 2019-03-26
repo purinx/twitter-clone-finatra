@@ -3,7 +3,9 @@ package Model
 case class Tweet(
                   id: Long,
                   userId: Long,
-                  isPrivate: Boolean,
+                  userName: String,
+                  userSubname: String,
+                  userIcon: String,
                   text: String,
                   content: String,
                   liked: Long,
