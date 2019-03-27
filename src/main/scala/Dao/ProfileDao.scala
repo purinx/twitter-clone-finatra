@@ -9,11 +9,11 @@ class ProfileDao {
 
   import ctx._
 
-  def create(userId: Long, called: String, bio: String, icon: String) = {
+  def create(userId: Long, subName: String, bio: String, icon: String) = {
     val q = quote {
       query[Profile].insert(
         _.userId -> lift(userId),
-        _.called -> lift(called),
+        _.subName -> lift(subName),
         _.bio -> lift(bio),
         _.icon -> lift(icon)
       )
@@ -21,17 +21,21 @@ class ProfileDao {
     run(q)
   }
 
-  def update(userId: Long, called: String, bio: String, icon: String) = {
+  def update(userId: Long, subName: String, bio: String, icon: String) = {
     val q = quote {
       query[Profile].filter(_.userId == lift(userId))
-        .update(_.called -> lift(called), _.bio -> lift(bio), _.icon -> lift(icon))
+        .update(
+          _.subName -> lift(subName),
+          _.bio -> lift(bio),
+          _.icon -> lift(icon)
+        )
     }
     run(q)
   }
 
-  def findById(userId: Long):Option[Profile] = {
+  def findById(userId: Long): Option[Profile] = {
     val q = quote {
-      query[Profile].filter(_.userId==lift(userId)).take(1)
+      query[Profile].filter(_.userId == lift(userId)).take(1)
     }
     run(q).headOption
   }

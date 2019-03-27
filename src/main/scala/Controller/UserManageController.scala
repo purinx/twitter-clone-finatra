@@ -61,6 +61,4 @@ class UserManageController extends Controller {
       request.getParam("password")
     )
   }
-
-
 }

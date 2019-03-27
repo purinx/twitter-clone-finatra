@@ -1,20 +1,20 @@
 package Controller
 
 import Dao.{LikeDao, RetweetDao, TweetDao}
-import com.twitter.finagle.http.{ParamMap, Request, RequestProxy}
+import Servise.TweetService
+import com.twitter.finagle.http.{Request, RequestProxy}
 import com.twitter.finatra.http.Controller
 
 
 class TweetController extends Controller {
 
-  lazy val tweetDao = new TweetDao
+  lazy val tweetService = new TweetService
   //TODO receive content as file(image,text,markdown)
   post("/tweet/new") { request: Request =>
-    tweetDao.create(
-      request.getParam("userId").toLong,
-      request.getParam("is_private").toBoolean,
+    tweetService.tweet(
+      request.getParam("user_id").toLong,
       request.getParam("text"),
-      request.getParam("content"),
+      Option(request.getParams("content").toString)
     )
   }
 

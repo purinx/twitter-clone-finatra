@@ -48,7 +48,7 @@ class TweetDao {
 
   def like(tweetId: Long) = {
     val q = quote {
-      query[Tweet].filter(tweet => tweet.id == tweetId)
+      query[Tweet].filter(tweet => tweet.id == lift(tweetId))
         .update(tweet => tweet.liked -> (tweet.liked + 1))
     }
     run(q)
