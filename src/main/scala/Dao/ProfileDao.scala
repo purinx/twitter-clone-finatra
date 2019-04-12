@@ -39,4 +39,71 @@ class ProfileDao {
     }
     run(q).headOption
   }
+
+  def addTweetCount(userId: Long) = {
+    val q = quote {
+      query[Profile].filter(_.userId == lift(userId))
+        .update(i => i.tweets -> (i.tweets + 1))
+    }
+    run(q)
+  }
+
+  def addFollowCount(userId: Long) = {
+    val q = quote {
+      query[Profile].filter(_.userId == lift(userId))
+        .update(i => i.following -> (i.following + 1))
+    }
+    run(q)
+  }
+
+  def addFollowedCount(userId: Long) = {
+    val q = quote {
+      query[Profile].filter(_.userId == lift(userId))
+        .update(i => i.followed -> (i.followed + 1))
+    }
+    run(q)
+  }
+
+  def addLikeCount(userId: Long) = {
+    val q = quote {
+      query[Profile].filter(_.userId == lift(userId))
+        .update(i => i.likes -> (i.likes + 1))
+    }
+    run(q)
+  }
+
+  def cutTweetCount(userId:Long) = {
+    val q = quote {
+      query[Profile].filter(_.userId == lift(userId))
+        .update(i=> i.tweets -> (i.tweets -1))
+    }
+    run(q)
+  }
+
+
+  def cutFollowCount(userId: Long) = {
+    val q = quote {
+      query[Profile].filter(_.userId == lift(userId))
+        .update(i => i.following -> (i.following - 1))
+    }
+    run(q)
+  }
+
+  def cutFollowedCount(userId: Long) = {
+    val q = quote {
+      query[Profile].filter(_.userId == lift(userId))
+        .update(i => i.followed -> (i.followed - 1))
+    }
+    run(q)
+  }
+
+  def cutLikeCount(userId: Long) = {
+    val q = quote {
+      query[Profile].filter(_.userId == lift(userId))
+        .update(i => i.likes -> (i.likes - 1))
+    }
+    run(q)
+  }
+
+
 }

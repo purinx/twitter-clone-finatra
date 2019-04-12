@@ -9,16 +9,13 @@ class TweetService {
   lazy val userDao = new UserDao
   lazy val profileDao = new ProfileDao
 
-  class TweetResult(_status: String) {
-    val status = _status
-  }
-
-  def tweet(userId: Long, text: String, content: Option[String]): TweetResult = {
+  def tweet(userId: Long, text: String, content: Option[String]):String = {
     val profile: Profile = profileDao.findById(userId)
-      .getOrElse(return new TweetResult("user not found"))
+      .getOrElse(return "user not found")
     val user:User = userDao.findById(userId)
-      .getOrElse(return new TweetResult("user not found"))
-    val result = tweetDao.create(
+      .getOrElse(return "user not found")
+
+    tweetDao.create(
       userId,
       user.name,
       profile.subName,
@@ -26,6 +23,23 @@ class TweetService {
       text,
       content.getOrElse("")
     ).toString
-    new TweetResult(result)
+
+    profileDao.addTweetCount(userId)
+
+    "success"
+  }
+
+  lazy val likeDao = new LikeDao
+  def like(userId: Long, tweetId:Long) = {
+    tweetDao.like(tweetId)
+    likeDao.like(userId, tweetId)
+    profileDao.addLikeCount(userId)
+  }
+
+  lazy val retweetDao = new RetweetDao
+  def retweet(userId:Long, tweetId:Long) = {
+    tweetDao.retweet(tweetId)
+    retweetDao.retweet(tweetId, userId)
+
   }
 }

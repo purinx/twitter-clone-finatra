@@ -1,6 +1,6 @@
 package Controller
 
-import Dao.{LikeDao, RetweetDao, TweetDao}
+import Dao.{LikeDao, ProfileDao, RetweetDao, TweetDao}
 import Servise.TweetService
 import com.twitter.finagle.http.{Request, RequestProxy}
 import com.twitter.finatra.http.Controller
@@ -8,6 +8,7 @@ import com.twitter.finatra.http.Controller
 
 class TweetController extends Controller {
 
+  lazy val profileDao = new ProfileDao
   lazy val tweetService = new TweetService
   //TODO receive content as file(image,text,markdown)
   post("/tweet/new") { request: Request =>
@@ -23,6 +24,8 @@ class TweetController extends Controller {
     val tweetId = request.getParam("tweetId").toLong
     val userId = request.getParam("user_id").toLong
     likeDao.like(userId, tweetId)
+    profileDao.addLikeCount(userId)
+
   }
 
   lazy val retweetDao = new RetweetDao
