@@ -17,7 +17,7 @@ create table tweet(
   `retweeted` int default 0,
   `timestamp` timestamp DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   PRIMARY KEY(`id`)
-);
+)ENGINE=InnoDB;
 
 create table user(
   `id` int not null auto_increment,
@@ -26,7 +26,7 @@ create table user(
   `email` varchar(255) unique,
   `token` varchar (255),
   primary key(id)
-);
+)ENGINE=InnoDB;
 
 CREATE TABLE profile (
   `user_id` int NOT NULL UNIQUE,
@@ -39,7 +39,7 @@ CREATE TABLE profile (
   `following` int default 0,
   `followed` int default 0,
   PRIMARY KEY (user_id)
-);
+)ENGINE=InnoDB;
 
 create table follow(
   `id` int auto_increment,
@@ -47,14 +47,14 @@ create table follow(
   `followed` int not null,
   `backed` bool,
   primary key(id)
-);
+)ENGINE=InnoDB;
 
 create table `likes`(
   `id` int auto_increment,
   `tweet_id` int not null,
   `user_id` int not null,
   primary key(id)
-);
+)ENGINE=InnoDB;
 
 create table retweet(
   `id` int auto_increment,
@@ -62,4 +62,4 @@ create table retweet(
   `tweet_id` int not null,
   `timestamp` TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   primary key(id)
-);
+)ENGINE=InnoDB;

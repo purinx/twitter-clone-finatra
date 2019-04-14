@@ -17,13 +17,23 @@ class RetweetDao {
         _.userId -> lift(userId)
       )
     }
-    ctx.run(q)
+    run(q)
   }
 
   def findByUserId(userId: Long): List[Retweet] = {
     val q = quote {
       query[Retweet].withFilter(_.userId == lift(userId)).sortBy(_.timestamp)
     }
-    ctx.run(q)
+    run(q)
+  }
+
+  def userIn(userIds: List[Long], offset:Int): List[Retweet] = {
+    val q = quote { (ids: Query[Long]) =>
+      query[Retweet].filter(i => ids.contains(i.userId))
+        .sortBy(_.id)(Ord.descNullsLast)
+        .drop(lift(offset))
+        .take(100)
+    }
+    run(q(liftQuery(userIds)))
   }
 }

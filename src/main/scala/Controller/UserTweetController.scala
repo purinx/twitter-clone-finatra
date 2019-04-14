@@ -8,6 +8,6 @@ class UserTweetController extends Controller {
   lazy val tweetDao = new TweetDao
   get("/user/:userId/tweets") { request: Request =>
     val userId = request.getIntParam("userId")
-    tweetDao.findByUser(userId)
+    tweetDao.findByUser(userId, 0)
   }
 }

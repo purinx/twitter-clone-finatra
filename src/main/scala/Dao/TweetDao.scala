@@ -16,11 +16,23 @@ class TweetDao {
     run(idQ).headOption
   }
 
-  def findByUser(userId: Long): List[Tweet] = {
+  def findByUser(userId: Long, offset: Int): List[Tweet] = {
     val userQ = quote {
-      query[Tweet].withFilter(_.userId == lift(userId)).sortBy(_.id)
+      query[Tweet].filter(_.userId == lift(userId))
+        .drop(lift(offset))
+        .take(100)
     }
     run(userQ)
+  }
+
+  def userIn(userIds: List[Long], offset: Int): List[Tweet] = {
+    val userQ = quote { (ids: Query[Long]) =>
+      query[Tweet].filter(i => ids.contains(i.userId))
+        .sortBy(_.id)(Ord.descNullsLast)
+        .drop(lift(offset))
+        .take(100)
+    }
+    run(userQ(liftQuery(userIds)))
   }
 
   def findByUserWithLimit(userId: Long, limit: Option[Int]): List[Tweet] = {
@@ -62,9 +74,9 @@ class TweetDao {
     run(q)
   }
 
-  def delete(tweetId: Long) ={
+  def delete(tweetId: Long) = {
     val q = quote {
-      query[Tweet].filter(_.id==lift(tweetId)).delete
+      query[Tweet].filter(_.id == lift(tweetId)).delete
     }
     run(q)
   }

@@ -3,111 +3,48 @@ insert into user (name, email, password, token) values
 ('no2', 'sample2', '2010-07-26@00:00:00', CURRENT_TIMESTAMP),
 ('no3', 'sample3', '2011-07-26@00:00:00', CURRENT_TIMESTAMP),
 ('no4', 'sample4', '2012-07-26@00:00:00', CURRENT_TIMESTAMP),
-('no5', 'sample5', '2013-07-26@00:00:00', CURRENT_TIMESTAMP);
+('no5', 'sample5', '2013-07-26@00:00:00', CURRENT_TIMESTAMP),
 ('no6', 'sample6', '2014-07-26@00:00:00', CURRENT_TIMESTAMP),
 ('no7', 'sample7', '2015-07-26@00:00:00', CURRENT_TIMESTAMP),
 ('no8', 'sample８', '2016-07-26@00:00:00', CURRENT_TIMESTAMP),
 ('no9', 'sample９', '2017-07-26@00:00:00', CURRENT_TIMESTAMP),
 ('no10', 'sample１０', '2082-07-26@00:00:00', CURRENT_TIMESTAMP);
 
+-- userの件数が膨大になる前に1000件followをinsertしておく
+insert into follow(user_id, followed)
+    select ceil(rand() * 1000), ceil(rand() * 1000)
+    from user A , user B, user C, user D;
+
+insert into retweet(user_id, tweet_id)
+    select ceil(rand() * 1000), ceil(rand() * 100000)
+    from user A , user B, user C, user D;
+
+insert into user (name, email, password, token)
+    select substring(md5(rand()), 1, 20), substring(md5(rand()), 1, 20), s1.password, s1.token
+    from user s1, user s2, user s3;
+
 
 drop table if exists user2;
 
-create table tweet(
-  `id` int not null auto_increment,
-  `user_id` bigint not null,
-  `is_private` bool,
-  `text` varchar(255),
-  `content` varchar(255) null,
-  `liked` int default 0,
-  `retweeted` int default 0,
-  `timestamp` timestamp,
-  PRIMARY KEY(`id`)
-);
+insert into tweet (user_id, user_name, text, content, liked, retweeted, timestamp) values
+(1, 'csdgrthw', substring(md5(rand()),0,100),null, 0,4,current_timestamp),
+(2, 'vfdbjkjbsda', substring(md5(rand()), 0, 100), null,1,5, CURRENT_TIMESTAMP),
+(3, 'xcasdfeabbag', substring(md5(rand()), 0, 100), null,1,3, CURRENT_TIMESTAMP),
+(4, 'opjkhgfdsfsvewhy', substring(md5(rand()), 0, 100), null,1,3, CURRENT_TIMESTAMP),
+(5, 'saoikjrepok', substring(md5(rand()), 0, 100), null,3, 8,CURRENT_TIMESTAMP),
+(6, 'csdgrthw', substring(md5(rand()), 0, 100), null, 0,4,current_timestamp),
+(7, 'vfdbjkjbsda', substring(md5(rand()), 0, 100), null,1,5, CURRENT_TIMESTAMP),
+(8, 'xcasdfeabbag', substring(md5(rand()), 0, 100), null,1,3, CURRENT_TIMESTAMP),
+(9, 'opjkhgfdsfsvewhy', substring(md5(rand()), 0, 100), null,1,3, CURRENT_TIMESTAMP),
+(10, 'saoikjrepok', substring(md5(rand()), 0, 100),  null,3, 8,CURRENT_TIMESTAMP);
 
-insert into tweet (user_id ,is_private, text,content, liked,retweeted, timestamp) values
-(1, 1,'csdgrthw',null, 0,4,CURRENT_TIMESTAMP),
-(2, 0,'vfdbjkjbsda',null,1,5, CURRENT_TIMESTAMP),
-(3, 0,'xcasdfeabbag',null,1,3, CURRENT_TIMESTAMP),
-(4, 0,'opjkhgfdsfsvewhy',null,1,3, CURRENT_TIMESTAMP),
-(5, 0,'saoikjrepok',null,3, 8,CURRENT_TIMESTAMP);
+-- 10 ^ 8 件のデータが作成できる
+insert into tweet (user_id, `text`, content, liked, retweeted, `timestamp`)
+ select ceil(rand() * 1000), substring(md5(rand()),0,100), null, ceil(rand() * 1000), ceil(rand() * 1000), s1.`timestamp`
+ from tweet s1, tweet s2, tweet s3, tweet s4, tweet s5, tweet s6, tweet s7;
 
-drop table if exists tweet1;
-create table tweet1(
-  `user_id` bigint not null,
-  `is_private` bool,
-  `text` varchar(255)
-);
 
-drop table if exists tweet2;
-create table tweet2(
-  `content` varchar(255) null,
-  `liked` int default 0,
-  `retweeted` int default 0,
-  `timestamp` timestamp
-);
+-- このままだと同じデータが繰り返しinsertさせただけなので
+-- ランダムな値に update する
 
-insert into tweet1(user_id ,is_private, text) values
-(1, 1,'csdgrthw'),
-(2, 0,'vfdbjkjbsda'),
-(3, 0,'xcasdfeabbag'),
-(4, 0,'opjkhgfdsfsvewhy'),
-(5, 0,'saoikjrepok');
 
-insert into tweet2(content,liked,retweeted,timestamp) values
-(null, 0,4,CURRENT_TIMESTAMP),
-(null,1,5, CURRENT_TIMESTAMP),
-(null,1,3, CURRENT_TIMESTAMP),
-(null,1,3, CURRENT_TIMESTAMP),
-(null,3, 8,CURRENT_TIMESTAMP);
-
-drop table if exists tweet3;
-create table tweet3(
-  `content` varchar(255) null,
-  `liked` int default 0,
-  `retweeted` int default 0,
-  `timestamp` timestamp
-);
-
-insert into tweet3(content,liked,retweeted,timestamp) values
-(null, 0,4,CURRENT_TIMESTAMP),
-(null,1,5, CURRENT_TIMESTAMP),
-(null,1,3, CURRENT_TIMESTAMP),
-(null,1,3, CURRENT_TIMESTAMP),
-(null,3, 8,CURRENT_TIMESTAMP);
-
-insert into tweet(user_id,is_private,text,content,liked,retweeted,timestamp)
-select A.*, B.* from tweet1 A join tweet2 B;
-
-drop table if exists follow1;
-create table follow1(
-  `user_id` int not null
-);
-
-insert into follow1(user_id) values
-(1),
-(2),
-(3),
-(4),
-(5),
-(6),
-(7),
-(8),
-(9),
-(10);
-
-drop table if exists follow2;
-create table follow2(
-  `followed` int not null
-);
-
-insert into follow2(followed) values
-(1),
-(3),
-(4),
-(5),
-(6),
-(9);
-
-insert into follow(user_id, followed)
-select A.*, B.* from follow1 A join follow2 B;
