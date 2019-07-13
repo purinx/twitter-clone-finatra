@@ -33,6 +33,5 @@ class TwitterCloneServer extends HttpServer {
       .add[TweetSearchController]
       .add[TimelineController]
       .add[UserTweetController]
-      .add[ApplicationController]
   }
 }
