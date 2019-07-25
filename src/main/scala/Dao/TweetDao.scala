@@ -1,11 +1,11 @@
 package Dao
 
-import io.getquill._
-import Model.Tweet
+import Model.{Follow, Tweet}
+import Module.DBModule
+import Module.DBModule.DBContext
+import javax.inject.Inject
 
-class TweetDao {
-  lazy val ctx: MysqlJdbcContext[SnakeCase.type] =
-    new MysqlJdbcContext(SnakeCase, "ctx")
+class TweetDao @Inject() (ctx: DBContext) {
 
   import ctx._
 
@@ -25,14 +25,17 @@ class TweetDao {
     run(userQ)
   }
 
-  def userIn(userIds: List[Long], offset: Int): List[Tweet] = {
-    val userQ = quote { (ids: Query[Long]) =>
-      query[Tweet].filter(i => ids.contains(i.userId))
-        .sortBy(_.id)(Ord.descNullsLast)
+  def findByFollowing(userId: Long, offset: Int): List[Tweet] = {
+    val q = quote {
+      (for {
+        following <- query[Follow].withFilter(_.userId == lift(userId))
+        tweet <- query[Tweet].join(_.userId == following.followed)
+      } yield tweet)
+        .sortBy(_.timestamp)
         .drop(lift(offset))
         .take(100)
     }
-    run(userQ(liftQuery(userIds)))
+    run(q)
   }
 
   def findByUserWithLimit(userId: Long, limit: Option[Int]): List[Tweet] = {
@@ -44,7 +47,7 @@ class TweetDao {
   }
 
   def create(userId: Long, userName: String, userSubName: String,
-             userIcon: String, text: String, content: String) = {
+             userIcon: String, text: String, content: String): Long = {
     val q = quote {
       query[Tweet].insert(
         _.userId -> lift(userId),
@@ -53,12 +56,12 @@ class TweetDao {
         _.userIcon -> lift(userIcon),
         _.text -> lift(text),
         _.content -> lift(content)
-      )
+      ).returning(_.id)
     }
     run(q)
   }
 
-  def like(tweetId: Long) = {
+  def like(tweetId: Long): Unit = {
     val q = quote {
       query[Tweet].filter(tweet => tweet.id == lift(tweetId))
         .update(tweet => tweet.liked -> (tweet.liked + 1))
@@ -66,7 +69,7 @@ class TweetDao {
     run(q)
   }
 
-  def retweet(tweetId: Long) = {
+  def retweet(tweetId: Long): Unit = {
     val q = quote {
       query[Tweet].filter(_.id == lift(tweetId))
         .update(tweet => tweet.retweeted -> (tweet.retweeted + 1))
@@ -74,7 +77,7 @@ class TweetDao {
     run(q)
   }
 
-  def delete(tweetId: Long) = {
+  def delete(tweetId: Long): Unit = {
     val q = quote {
       query[Tweet].filter(_.id == lift(tweetId)).delete
     }

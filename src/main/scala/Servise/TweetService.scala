@@ -1,45 +1,50 @@
 package Servise
 
 import Dao._
-import Model.{Profile, User}
+import com.twitter.util.Future
+import javax.inject.{Inject, Singleton}
 
-class TweetService {
+class TweetService @Inject()(
+  tweetDao: TweetDao,
+  userDao: UserDao,
+  profileDao: ProfileDao,
+  likeDao: LikeDao,
+  retweetDao: RetweetDao
+) {
 
-  lazy val tweetDao = new TweetDao
-  lazy val userDao = new UserDao
-  lazy val profileDao = new ProfileDao
-
-  def tweet(userId: Long, text: String, content: Option[String]):String = {
-    val profile: Profile = profileDao.findById(userId)
-      .getOrElse(return "user not found")
-    val user:User = userDao.findById(userId)
-      .getOrElse(return "user not found")
-
-    tweetDao.create(
-      userId,
-      user.name,
-      profile.subName,
-      profile.icon,
-      text,
-      content.getOrElse("")
-    ).toString
-
-    profileDao.addTweetCount(userId)
-
-    "success"
+  def tweet(
+    userId: Long,
+    text: String,
+    content: Option[String]
+  ): Future[Either[String, Long]] = Future {
+    val tweetId: Option[Long] = for {
+      profile <- profileDao.findById(userId)
+      user <- userDao.findById(userId)
+    } yield {
+      tweetDao.create(
+        userId,
+        user.name,
+        profile.subName,
+        profile.icon,
+        text,
+        content.getOrElse("")
+      )
+    }
+    Either.cond(tweetId.isDefined,
+      tweetId.get,
+      "Invalid TweetId"
+    )
   }
 
-  lazy val likeDao = new LikeDao
-  def like(userId: Long, tweetId:Long) = {
+  def like(userId: Long, tweetId: Long): Unit = {
     tweetDao.like(tweetId)
     likeDao.like(userId, tweetId)
-    profileDao.addLikeCount(userId)
+    profileDao.updateLikeCount(userId, 1)
   }
 
-  lazy val retweetDao = new RetweetDao
-  def retweet(userId:Long, tweetId:Long) = {
+  def retweet(userId: Long, tweetId: Long): Unit = {
     tweetDao.retweet(tweetId)
     retweetDao.retweet(tweetId, userId)
-
+    profileDao.updateTweetCount(userId, 1)
   }
 }

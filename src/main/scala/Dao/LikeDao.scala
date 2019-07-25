@@ -1,25 +1,25 @@
 package Dao
 
-import io.getquill.{MysqlJdbcContext,SnakeCase}
 import Model.Likes
+import Module.DBModule
+import Module.DBModule.DBContext
+import javax.inject.Inject
 
-class LikeDao {
-
-  lazy val ctx: MysqlJdbcContext[SnakeCase.type] = new MysqlJdbcContext(SnakeCase, "ctx")
+class LikeDao @Inject() (ctx: DBContext) {
 
   import ctx._
 
-  def like(userId:Long, tweetId:Long)= {
+  def like(userId: Long, tweetId: Long): Unit = {
     val q = quote {
-      query[Likes].insert(_.userId->lift(userId), _.tweetId->lift(tweetId))
+      query[Likes].insert(_.userId -> lift(userId), _.tweetId -> lift(tweetId))
     }
-    ctx.run(q)
+    run(q)
   }
 
-  def findByTweet(tweetId:Long)={
-    val q = quote{
-      query[Likes].withFilter(_.tweetId==lift(tweetId))
+  def findByTweet(tweetId: Long): Unit = {
+    val q = quote {
+      query[Likes].withFilter(_.tweetId == lift(tweetId))
     }
-    ctx.run(q)
+    run(q)
   }
 }

@@ -1,3 +1,5 @@
+package Filter
+
 import com.twitter.finagle.http.{Request, Response}
 import com.twitter.finagle.{Filter, Service, SimpleFilter}
 import com.twitter.util.Future

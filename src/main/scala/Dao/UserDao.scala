@@ -1,14 +1,12 @@
 package Dao
 
 import Model.User
+import Module.DBModule
+import Module.DBModule.DBContext
 import io.getquill.{MysqlJdbcContext, SnakeCase}
-import com.twitter.util.Future
+import javax.inject.Inject
 
-class UserDao {
-
-  //コンテキスト生成
-  lazy val ctx: MysqlJdbcContext[SnakeCase.type] =
-    new MysqlJdbcContext(SnakeCase, "ctx")
+class UserDao @Inject()(ctx: DBContext) {
 
   import ctx._
 
@@ -24,12 +22,11 @@ class UserDao {
   //  case Diesel.name => Diesel
   //}
 
-
   def findById(id: Long): Option[User] = {
     val q = quote {
       query[User].filter(_.id == lift(id)).take(1)
     }
-    ctx.run(q).headOption
+    run(q).headOption
   }
 
   def create(name: String, email: String, password: String): Long = {
@@ -40,30 +37,23 @@ class UserDao {
         _.password -> lift(password),
       )
     }
-    ctx.run(q)
+    run(q)
   }
 
-  def setToken(id: Long, token: String) = {
+  def setToken(id: Long, token: String): Unit = {
     val setTokenQuery = quote {
       query[User].filter(_.id == lift(id)).update(_.token -> lift(token))
     }
-    ctx.run(setTokenQuery)
+    run(setTokenQuery)
   }
-
-  /*
-  def delete(id: Long): Unit = {
-
-
-  }
-  */
 
   def getAll: List[User] = {
     val allQ = quote(query[User].sortBy(_.id))
-    ctx.run(allQ)
+    run(allQ)
   }
 
   def findByName(name: String): Option[User] = {
-    ctx.run(
+    run(
       quote {
         query[User].filter(_.name == lift(name)).take(1)
       }

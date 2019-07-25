@@ -4,31 +4,37 @@ import Dao.{ProfileDao, UserDao}
 import Servise.UserService
 import com.twitter.finagle.http.Request
 import com.twitter.finatra.http.Controller
-import io.getquill.{MysqlJdbcContext, SnakeCase}
+import javax.inject.Inject
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder
 
-class UserManageController extends Controller {
-  lazy val ctx = new MysqlJdbcContext(SnakeCase, "ctx")
-  val userDao: UserDao = new UserDao
-  val profileDao: ProfileDao = new ProfileDao
+class UserManageController @Inject()(
+  userDao: UserDao,
+  profileDao: ProfileDao,
+  userService: UserService
+) extends Controller {
+
 
   get("/user/all") { request: Request =>
     userDao.getAll
   }
 
-  get("/profile/:userId") { request: Request =>
-    profileDao.findById(request.getParam("userId").toLong)
+  get("/user/:userId/profile/:profileId") { request: Request =>
+    val profileId = request.getLongParam("profileId")
+    profileDao.isPublic(profileId) match {
+      case None => "profile not found"
+      case Some(true) => profileDao.findById(request.getLongParam("userId"))
+      // implement private cehck
+      case Some(false) => "private user"
+    }
+    profileDao.findById(request.getLongParam("userId"))
   }
 
-  get("/user/:userId/profile") { request: Request =>
-    profileDao.findById(request.getParam("userId").toLong)
-  }
 
   //TODO Filter only user own.
   //TODO Receive icon as img file. Then save url of bucket.
   post("/user/:userId/profile/update") { request: Request =>
     profileDao.update(
-      request.getParam("userId").toLong,
+      request.getLongParam("userId"),
       request.getParam("name"),
       request.getParam("bio"),
       request.getParam("icon")
@@ -54,7 +60,6 @@ class UserManageController extends Controller {
     )
   }
 
-  lazy val userService: UserService = new UserService
   post("/user/login") { request: Request =>
     userService.login(
       request.getParam("id"),

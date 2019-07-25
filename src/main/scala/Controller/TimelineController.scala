@@ -1,20 +1,21 @@
 package Controller
 
+import Dao.{FollowDao, RetweetDao, TweetDao}
 import com.twitter.finagle.http.Request
 import com.twitter.finatra.http._
-import Dao.{FollowDao, RetweetDao, TweetDao}
+import javax.inject.Inject
 
-class TimelineController extends Controller {
-  val tweetDao: TweetDao = new TweetDao
-  val followDao: FollowDao = new FollowDao
-  val retweetDao: RetweetDao = new RetweetDao
+class TimelineController @Inject()(
+  tweetDao: TweetDao,
+  followDao: FollowDao,
+  retweetDao: RetweetDao
+) extends Controller {
 
   get("/user/:id/timeline") { request: Request =>
-    val userId = request.getIntParam("id")
-    val following: List[Long] = followDao.getFollowingIdList(userId)
-    val tweets = tweetDao.userIn(following, 0)
-    val retweets = retweetDao.userIn(following, 0)
-
+    val userId = request.getLongParam("id")
+    val offset = Option(request.getIntParam("offset"))
+    val tweets = tweetDao.findByFollowing(userId, offset.getOrElse(0))
+    val retweets = retweetDao.findByFollowing(userId, offset.getOrElse(0))
     Map(
       "tweets" -> tweets,
       "retweets" -> retweets.map(i => Map(

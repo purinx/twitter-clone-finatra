@@ -1,27 +1,27 @@
 package Dao
 
 import Model.Profile
-import io.getquill._
+import Module.DBModule
+import Module.DBModule.DBContext
+import javax.inject.Inject
 
-class ProfileDao {
-
-  lazy val ctx: MysqlJdbcContext[SnakeCase.type] = new MysqlJdbcContext(SnakeCase, "ctx")
+class ProfileDao @Inject()(ctx: DBContext) {
 
   import ctx._
 
-  def create(userId: Long, subName: String, bio: String, icon: String) = {
+  def create(userId: Long, subName: String, bio: String, icon: String): Long = {
     val q = quote {
       query[Profile].insert(
         _.userId -> lift(userId),
         _.subName -> lift(subName),
         _.bio -> lift(bio),
         _.icon -> lift(icon)
-      )
+      ).returning(_.id)
     }
     run(q)
   }
 
-  def update(userId: Long, subName: String, bio: String, icon: String) = {
+  def update(userId: Long, subName: String, bio: String, icon: String): Unit = {
     val q = quote {
       query[Profile].filter(_.userId == lift(userId))
         .update(
@@ -40,70 +40,44 @@ class ProfileDao {
     run(q).headOption
   }
 
-  def addTweetCount(userId: Long) = {
+  def updateTweetCount(userId: Long, count: Long): Unit = {
     val q = quote {
       query[Profile].filter(_.userId == lift(userId))
-        .update(i => i.tweets -> (i.tweets + 1))
+        .update(i => i.tweets -> (i.tweets + lift(count)))
     }
     run(q)
   }
 
-  def addFollowCount(userId: Long) = {
+  def updateFollowCount(userId: Long, count: Long): Unit = {
     val q = quote {
       query[Profile].filter(_.userId == lift(userId))
-        .update(i => i.following -> (i.following + 1))
+        .update(i => i.following -> (i.following + lift(count)))
     }
     run(q)
   }
 
-  def addFollowedCount(userId: Long) = {
+  def updateLikeCount(userId: Long, count: Long): Unit = {
     val q = quote {
       query[Profile].filter(_.userId == lift(userId))
-        .update(i => i.followed -> (i.followed + 1))
-    }
-    run(q)
-  }
-
-  def addLikeCount(userId: Long) = {
-    val q = quote {
-      query[Profile].filter(_.userId == lift(userId))
-        .update(i => i.likes -> (i.likes + 1))
-    }
-    run(q)
-  }
-
-  def cutTweetCount(userId:Long) = {
-    val q = quote {
-      query[Profile].filter(_.userId == lift(userId))
-        .update(i=> i.tweets -> (i.tweets -1))
+        .update(i => i.likes -> (i.likes + lift(count)))
     }
     run(q)
   }
 
 
-  def cutFollowCount(userId: Long) = {
+  def updateFollowedCount(userId: Long, count: Long): Unit = {
     val q = quote {
       query[Profile].filter(_.userId == lift(userId))
-        .update(i => i.following -> (i.following - 1))
+        .update(i => i.followed -> (i.followed + lift(count)))
     }
     run(q)
   }
 
-  def cutFollowedCount(userId: Long) = {
+  def isPublic(userId: Long): Option[Boolean] = {
     val q = quote {
-      query[Profile].filter(_.userId == lift(userId))
-        .update(i => i.followed -> (i.followed - 1))
+      query[Profile].filter(_.userId == lift(userId)).map(_.privacy == lift("public")).take(1)
     }
-    run(q)
+    run(q).headOption
   }
-
-  def cutLikeCount(userId: Long) = {
-    val q = quote {
-      query[Profile].filter(_.userId == lift(userId))
-        .update(i => i.likes -> (i.likes - 1))
-    }
-    run(q)
-  }
-
 
 }

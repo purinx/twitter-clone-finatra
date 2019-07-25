@@ -7,10 +7,15 @@ import com.twitter.finatra.http.routing.HttpRouter
 import com.twitter.finatra.http.HttpServer
 import Config._
 import Controller._
+import Module.DBModule
 
 object Main extends TwitterCloneServer
 
 class TwitterCloneServer extends HttpServer {
+
+  override def modules = Seq(
+    DBModule
+  )
 
   // 色々な設定項目はBaseHttpServerを参照
   override def defaultHttpPort: String = conf.getString("port")
@@ -32,6 +37,6 @@ class TwitterCloneServer extends HttpServer {
       .add[UserManageController]
       .add[TweetSearchController]
       .add[TimelineController]
-      .add[UserTweetController]
+      .add[ProfileController]
   }
 }
