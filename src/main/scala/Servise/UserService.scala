@@ -2,7 +2,7 @@ package Servise
 
 import java.sql.Timestamp
 import javax.inject.Inject
-import Dao.UserDao
+import dao.UserDao
 import Model.User
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder
 

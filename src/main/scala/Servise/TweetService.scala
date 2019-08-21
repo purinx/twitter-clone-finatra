@@ -1,6 +1,6 @@
 package Servise
 
-import Dao._
+import dao._
 import com.twitter.util.Future
 import javax.inject.{Inject, Singleton}
 

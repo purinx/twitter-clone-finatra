@@ -1,7 +1,7 @@
 package Controller
 
 
-import Dao.{ProfileDao, TweetDao}
+import dao.{ProfileDao, TweetDao}
 import com.twitter.finatra.http.Controller
 import com.twitter.finagle.http.Request
 import javax.inject.Inject

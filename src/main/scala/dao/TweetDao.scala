@@ -1,11 +1,10 @@
-package Dao
+package dao
 
 import Model.{Follow, Tweet}
-import Module.DBModule
 import Module.DBModule.DBContext
 import javax.inject.Inject
 
-class TweetDao @Inject() (ctx: DBContext) {
+class TweetDao @Inject()(ctx: DBContext) {
 
   import ctx._
 
@@ -31,7 +30,7 @@ class TweetDao @Inject() (ctx: DBContext) {
         following <- query[Follow].withFilter(_.userId == lift(userId))
         tweet <- query[Tweet].join(_.userId == following.followed)
       } yield tweet)
-        .sortBy(_.timestamp)
+        .sortBy(_.id)(Ord.descNullsLast)
         .drop(lift(offset))
         .take(100)
     }
@@ -47,7 +46,7 @@ class TweetDao @Inject() (ctx: DBContext) {
   }
 
   def create(userId: Long, userName: String, userSubName: String,
-             userIcon: String, text: String, content: String): Long = {
+    userIcon: String, text: String, content: String): Long = {
     val q = quote {
       query[Tweet].insert(
         _.userId -> lift(userId),

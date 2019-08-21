@@ -1,6 +1,6 @@
 package Controller
 
-import Dao.{ProfileDao, UserDao}
+import dao.{ProfileDao, UserDao}
 import Servise.UserService
 import com.twitter.finagle.http.Request
 import com.twitter.finatra.http.Controller

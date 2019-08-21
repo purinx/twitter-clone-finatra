@@ -1,4 +1,4 @@
-package Dao
+package dao
 
 import Model.User
 import Module.DBModule

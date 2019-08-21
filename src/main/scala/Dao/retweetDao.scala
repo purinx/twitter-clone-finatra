@@ -1,7 +1,6 @@
-package Dao
+package dao
 
 import Model.{Follow, Retweet}
-import Module.DBModule
 import Module.DBModule.DBContext
 import com.twitter.util.Future
 import javax.inject.Inject
@@ -24,7 +23,7 @@ class RetweetDao @Inject()(ctx: DBContext) {
     val q = quote {
       query[Retweet]
         .withFilter(_.userId == lift(userId))
-        .sortBy(_.timestamp)
+        .sortBy(_.id)(Ord.descNullsLast)
         .take(100)
     }
     run(q)
@@ -36,7 +35,7 @@ class RetweetDao @Inject()(ctx: DBContext) {
         following <- query[Follow].withFilter(_.userId == lift(userId))
         retweet <- query[Retweet].join(_.userId == following.followed)
       } yield retweet)
-        .sortBy(_.timestamp)
+        .sortBy(_.id)(Ord.descNullsLast)
         .drop(lift(offset))
         .take(100)
     }

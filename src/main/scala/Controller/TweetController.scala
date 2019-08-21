@@ -1,6 +1,6 @@
 package Controller
 
-import Dao.{LikeDao, ProfileDao, RetweetDao}
+import dao.{LikeDao, ProfileDao, RetweetDao, TweetDao}
 import Servise.TweetService
 import com.twitter.finagle.http.Request
 import com.twitter.finatra.http.Controller
@@ -11,7 +11,8 @@ class TweetController @Inject() (
   profileDao: ProfileDao,
   tweetService: TweetService,
   likeDao: LikeDao,
-  retweetDao: RetweetDao
+  retweetDao: RetweetDao,
+  tweetDao: TweetDao
 ) extends Controller {
 
   //TODO receive content as file(image,text,markdown)
@@ -35,5 +36,9 @@ class TweetController @Inject() (
     val userId = request.getParam("user_id").toLong
     retweetDao.retweet(tweetId, userId)
     profileDao.updateLikeCount(userId, 1)
+  }
+
+  post("/tweet/seed") { request: Request =>
+    tweetDao.seed()
   }
 }
