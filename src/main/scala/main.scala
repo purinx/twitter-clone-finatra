@@ -5,8 +5,8 @@ import com.twitter.finagle.tracing.NullTracer
 import com.twitter.finatra.http.filters.{CommonFilters, LoggingMDCFilter}
 import com.twitter.finatra.http.routing.HttpRouter
 import com.twitter.finatra.http.HttpServer
-import Config._
-import Controller._
+import com.kijimaru.twitter.infrastructure.Config._
+import com.kijimaru.twitter.controller._
 
 object Main extends TwitterCloneServer
 

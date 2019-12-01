@@ -1,4 +1,4 @@
-import org.apache.logging.log4j.core.config.composite.MergeStrategy
+
 
 lazy val root = (project in file(".")).
   settings(
@@ -12,7 +12,7 @@ lazy val dervy = {
   Seq(
     "com.twitter" %% "finatra-http" % "19.2.0",
     "mysql" % "mysql-connector-java" % "5.1.38",
-    "io.getquill" %% "quill-jdbc" % "3.0.1",
+    "org.skinny-framework" %% "skinny-orm" % "2.5.2",
     "com.typesafe" % "config" % "1.3.2",
     "org.slf4j" % "slf4j-simple" % "1.6.4",
     "org.scala-lang" % "scala-compiler" % "2.12.8",

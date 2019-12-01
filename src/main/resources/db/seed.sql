@@ -6,9 +6,9 @@ insert into user (name, email, password, token) values
 ('no5', 'sample5', '2013-07-26@00:00:00', CURRENT_TIMESTAMP),
 ('no6', 'sample6', '2014-07-26@00:00:00', CURRENT_TIMESTAMP),
 ('no7', 'sample7', '2015-07-26@00:00:00', CURRENT_TIMESTAMP),
-('no8', 'sample８', '2016-07-26@00:00:00', CURRENT_TIMESTAMP),
-('no9', 'sample９', '2017-07-26@00:00:00', CURRENT_TIMESTAMP),
-('no10', 'sample１０', '2082-07-26@00:00:00', CURRENT_TIMESTAMP);
+('no8', 'sample8', '2016-07-26@00:00:00', CURRENT_TIMESTAMP),
+('no9', 'sample9', '2017-07-26@00:00:00', CURRENT_TIMESTAMP),
+('no10', 'sample10', '2082-07-26@00:00:00', CURRENT_TIMESTAMP);
 
 -- userの件数が膨大になる前に1000件followをinsertしておく
 insert into follow(user_id, followed)
