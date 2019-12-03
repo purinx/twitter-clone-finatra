@@ -1,12 +1,14 @@
 package com.kijimaru.twitter.servise
 
-import com.kijimaru.twitter.domain.User
+import com.google.inject.Inject
+import com.kijimaru.twitter.domain.entity.User
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder
 
-class UserService {
+class UserService @Inject()(
+  user: User
+){
 
   lazy val bCryptPasswordEncoder: BCryptPasswordEncoder = new BCryptPasswordEncoder
-  lazy val userDao: UserDao = new UserDao
 
   class loginResult(_status: String, _id:java.lang.Long ,_token: String){
     val status = _status
@@ -14,8 +16,8 @@ class UserService {
     val token = _token
   }
 
-  def login(name: String, password: String): loginResult = {
-    val user: User = userDao.findByName(name).getOrElse(
+  def login(email: String, password: String): loginResult = {
+    val user: User = user.whe.getOrElse(
       return new loginResult("userNotFound",null, "")
     )
     val result: Boolean = bCryptPasswordEncoder.matches(password, user.password)

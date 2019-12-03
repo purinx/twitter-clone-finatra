@@ -1,6 +1,6 @@
 package com.kijimaru.twitter.servise
 
-import com.kijimaru.twitter.domain.{Profile, User}
+import com.kijimaru.twitter.domain.entity.{Profile, User}
 
 class TweetService {
 

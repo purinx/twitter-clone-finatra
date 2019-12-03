@@ -1,4 +1,4 @@
-package com.kijimaru.twitter.domain
+package com.kijimaru.twitter.domain.entity
 
 import scalikejdbc.{WrappedResultSet, autoConstruct}
 import skinny.orm.{Alias, SkinnyCRUDMapper}

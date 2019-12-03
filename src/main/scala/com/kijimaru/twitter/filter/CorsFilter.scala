@@ -11,7 +11,6 @@ class CorsFilter extends SimpleFilter[Request, Response] {
           .add("access-control-allow-origin", "*")
           .add("access-control-allow-headers", "accept, content-type")
           .add("access-control-allow-methods", "GET,HEAD,POST,DELETE,OPTIONS,PUT,PATCH")
-
         response
     }
   }

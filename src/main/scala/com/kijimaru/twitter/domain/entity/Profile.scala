@@ -1,6 +1,6 @@
-package com.kijimaru.twitter.domain
+package com.kijimaru.twitter.domain.entity
 
-import scalikejdbc.{WrappedResultSet, autoConstruct}
+import scalikejdbc.{ResultName, WrappedResultSet}
 import skinny.orm.{Alias, SkinnyCRUDMapper}
 
 case class Profile(
@@ -19,6 +19,6 @@ object Profile extends SkinnyCRUDMapper[Profile] {
 
   override def defaultAlias: Alias[Profile] = createAlias("p")
 
-  override def extract(rs: WrappedResultSet, n: scalikejdbc.ResultName[Profile]): Profile = autoConstruct(rs, n)
+  override def extract(rs: WrappedResultSet, n: ResultName[Profile]): Profile = autoConstruct(rs, n)
 
 }
