@@ -15,8 +15,7 @@ lazy val dervy = {
     "mysql" % "mysql-connector-java" % "8.0.17",
     "org.scala-lang" % "scala-compiler" % "2.12.8",
     "org.slf4j" % "slf4j-simple" % "1.6.4",
-    "org.springframework.security" % "spring-security-web" % "4.1.3.RELEASE"
-
+    "com.github.t3hnar" %% "scala-bcrypt" % "4.1"
   )
 }
 

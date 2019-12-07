@@ -1,3 +1,5 @@
+package com.kijimaru.twitter
+
 import com.twitter.finagle.Http
 import com.twitter.finagle.http.{Request, Response}
 import com.twitter.finagle.stats.NullStatsReceiver
@@ -10,9 +12,7 @@ import com.kijimaru.twitter.module.DBModule
 import com.kijimaru.twitter.infrastructure.Config._
 import com.kijimaru.twitter.controller._
 
-object Main extends TwitterCloneServer
-
-class TwitterCloneServer extends HttpServer {
+object Main extends HttpServer {
 
   // DIの設定
   override def modules = Seq(
