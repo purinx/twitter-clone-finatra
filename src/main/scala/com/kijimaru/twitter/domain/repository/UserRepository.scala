@@ -10,7 +10,7 @@ trait UserRepository {
 
   def findByEmail(email: String): Option[User]
 
-  def findByToken(tokane: String): Option[User]
+  def findByToken(token: String): Option[User]
 
   def update(form: UserForm): Either[String, Boolean]
 

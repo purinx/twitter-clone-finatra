@@ -11,19 +11,17 @@ class UserRepositoryImpl @Inject()(ctx: DBContext) extends UserRepository {
 
   import ctx._
 
-  override def create(form: UserForm): Try[Long] = {
-    Try(
-      run(
-        quote {
-          query[User]
-            .insert(
-              _.name     -> form.name,
-              _.email    -> form.email,
-              _.password -> form.hashedPassword
-            )
-            .returning(_.id)
-        }
-      )
+  override def create(form: UserForm): Try[Long] = Try {
+    run(
+      quote {
+        query[User]
+          .insert(
+            _.screenName -> form.screenName,
+            _.email -> form.email,
+            _.password -> form.hashedPassword
+          )
+          .returning(_.id)
+      }
     )
   }
 
@@ -38,7 +36,7 @@ class UserRepositoryImpl @Inject()(ctx: DBContext) extends UserRepository {
       }
     ).headOption
     passwordQueryResult match {
-      case None       => Left("User not found.")
+      case None => Left("User not found.")
       case Some(hash) => Right(rawPassword.isBcrypted(hash))
     }
   }
@@ -68,8 +66,8 @@ class UserRepositoryImpl @Inject()(ctx: DBContext) extends UserRepository {
             query[User]
               .filter(_.id == lift(id))
               .update(
-                _.name     -> form.name,
-                _.email    -> form.email,
+                _.screenName -> form.screenName,
+                _.email -> form.email,
                 _.password -> form.hashedPassword,
               )
           }
