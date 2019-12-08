@@ -1,23 +1,23 @@
 package Controller
 
-
-import dao.{ProfileDao, TweetDao}
+import com.kijimaru.twitter.domain.repository.ProfileRepository
+import com.kijimaru.twitter.domain.repository.TweetRepository
 import com.twitter.finatra.http.Controller
 import com.twitter.finagle.http.Request
 import javax.inject.Inject
 
 class ProfileController @Inject() (
-  tweetDao: TweetDao,
-  profileDao: ProfileDao
+  tweetRepository: TweetRepository,
+  profileRepository: ProfileRepository
 ) extends Controller {
 
   get("/user/:userId/tweets") { request: Request =>
     val userId = request.getIntParam("userId")
-    tweetDao.findByUser(userId, 0)
+    tweetRepository.findByUser(userId, 0)
   }
 
   get("/user/:userId/profile") { request: Request =>
     val userId = request.getLongParam("userId")
-    profileDao.findById(userId)
+    profileRepository.findById(userId)
   }
 }
