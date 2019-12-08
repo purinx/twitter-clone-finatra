@@ -1,14 +1,8 @@
 package com.kijimaru.twitter.controller
 
-<<<<<<< HEAD:src/main/scala/Controller/TweetController.scala
-import dao.{LikeDao, ProfileDao, RetweetDao, TweetDao}
-import Servise.TweetService
-import com.twitter.finagle.http.Request
-=======
 import Dao.{LikeDao, ProfileDao, RetweetDao, TweetDao}
 import com.kijimaru.twitter.servise.TweetService
 import com.twitter.finagle.http.{Request, RequestProxy}
->>>>>>> e07e1c813d9903a75bd8265a865b45b89de2e094:src/main/scala/com/kijimaru/twitter/controller/TweetController.scala
 import com.twitter.finatra.http.Controller
 import javax.inject.{Inject, Singleton}
 

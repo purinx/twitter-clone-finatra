@@ -1,12 +1,7 @@
 package com.kijimaru.twitter.controller
 
-<<<<<<< HEAD:src/main/scala/Controller/UserManageController.scala
-import dao.{ProfileDao, UserDao}
-import Servise.UserService
-=======
 import Dao.{ProfileDao, UserDao}
 import com.kijimaru.twitter.servise.UserService
->>>>>>> e07e1c813d9903a75bd8265a865b45b89de2e094:src/main/scala/com/kijimaru/twitter/controller/UserManageController.scala
 import com.twitter.finagle.http.Request
 import com.twitter.finatra.http.Controller
 import javax.inject.Inject
