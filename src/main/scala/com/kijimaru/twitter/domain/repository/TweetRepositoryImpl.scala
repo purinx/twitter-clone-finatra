@@ -19,7 +19,7 @@ class TweetRepositoryImpl @Inject()(ctx: DBContext) extends TweetRepository {
       for {
         followeeIds <- query[Follow].withFilter(_.userId == lift(userId)).map(_.followed)
         tweets <- query[Tweet].filter(tweet => liftQuery(followeeIds).contains(tweet.userId))
-      }
+      } yield (followeeIds, tweets)
     }
   }
 }
