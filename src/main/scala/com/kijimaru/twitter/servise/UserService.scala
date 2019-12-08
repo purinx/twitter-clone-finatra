@@ -1,30 +1,33 @@
 package com.kijimaru.twitter.servise
 
-import com.google.inject.Inject
+import javax.inject.Inject
 import com.kijimaru.twitter.domain.entity.User
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder
+import com.kijimaru.twitter.domain.repository.UserRepository
+import com.github.t3hnar.bcrypt._
+import java.sql.Timestamp // FIXME
 
 class UserService @Inject()(
-  user: User
-){
+  userRepository: UserRepository
+) {
 
-  lazy val bCryptPasswordEncoder: BCryptPasswordEncoder = new BCryptPasswordEncoder
+  import UserService._
 
-  case class Login(id: java.lang.Long, token: String, timestamp: Timestamp)
-
-  def login(email: String, password: String): loginResult = {
-    val user: User = user.whe.getOrElse(
-      return new loginResult("userNotFound",null, "")
-    )
-    val result: Boolean = bCryptPasswordEncoder.matches(password, user.password)
-    if (result) {
+  def login(email: String, password: String): Either[String, Login] = {
+    for {
+      user <- userRepository.findByEmail(email).toRight("userNotFound")
+      _ <- Either.cond(password.bcrypt == user.password, (), "invalid password") // FIXME: seed欲しい
+    } yield {
       //100文字のランダムな文字列
       val token = scala.util.Random.alphanumeric.take(100).mkString
-      userDao.setToken(user.id, token)
-      Right(Login(user.id, token, new Timestamp(System.currentTimeMillis())))
-    } else {
-      Left("invalid password")
+      userRepository.setToken(user.id, token)
+      Login(user.id, token, new Timestamp(System.currentTimeMillis()))
     }
   }
+
+}
+
+object UserService {
+
+  case class Login(id: Long, token: String, timestamp: Timestamp)
 
 }

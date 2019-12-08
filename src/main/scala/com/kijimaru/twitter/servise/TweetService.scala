@@ -1,42 +1,53 @@
 package com.kijimaru.twitter.servise
 
+import javax.inject.Inject
 import com.kijimaru.twitter.domain.entity.{Profile, User}
+import com.kijimaru.twitter.domain.repository.{
+  TweetRepository,
+  RetweetRepository,
+  LikeRepository,
+  UserRepository,
+  ProfileRepository
+}
 
-class TweetService {
+class TweetService @Inject()(
+  tweetRepository: TweetRepository,
+  retweetRepository: RetweetRepository,
+  likeRepository: LikeRepository,
+  userRepository: UserRepository,
+  profileRepository: ProfileRepository
+) {
 
-  lazy val tweetDao = new TweetDao
-  lazy val userDao = new UserDao
-  lazy val profileDao = new ProfileDao
 
-  def tweet(userId: Long, text: String, content: Option[String]):String = {
-    val profile: Profile = profileDao.findById(userId)
-      .getOrElse(return "user not found")
-    val user:User = userDao.findById(userId)
-      .getOrElse(return "user not found")
 
-    tweetDao.create(
-      userId,
-      user.name,
-      profile.subName,
-      profile.icon,
-      text,
-      content.getOrElse("")
-    ).toString
+  def tweet(userId: Long, text: String, content: Option[String]): String = {
 
-    profileDao.addTweetCount(userId)
+    def createUser(user: User, profile: Profile): Unit = {
+      tweetRepository.create(
+        userId,
+        text,
+        content.getOrElse("")
+      )
+    }
 
-    "success"
+    val result = for {
+      profile <- profileRepository.findById(userId).toRight("user not found") // なに必要なんだろう
+      user <- userRepository.findById(userId).toRight("user not found")
+      _ <- Right(createUser(user, profile))
+      _ <- Right(profileRepository.addTweetCount(userId))
+    } yield "success"
+    result.merge
   }
 
   def like(userId: Long, tweetId: Long): Unit = {
-    tweetDao.like(tweetId)
-    likeDao.like(userId, tweetId)
-    profileDao.updateLikeCount(userId, 1)
+    tweetRepository.like(tweetId)
+    likeRepository.like(userId, tweetId)
+    profileRepository.updateLikeCount(userId, 1)
   }
 
   def retweet(userId: Long, tweetId: Long): Unit = {
-    tweetDao.retweet(tweetId)
-    retweetDao.retweet(tweetId, userId)
-    profileDao.updateTweetCount(userId, 1)
+    tweetRepository.retweet(tweetId)
+    retweetRepository.retweet(tweetId, userId)
+    profileRepository.addTweetCount(userId)
   }
 }

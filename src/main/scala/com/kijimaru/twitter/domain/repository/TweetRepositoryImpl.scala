@@ -1,6 +1,6 @@
 package com.kijimaru.twitter.domain.repository
 
-import com.google.inject.Inject
+import javax.inject.Inject
 import com.kijimaru.twitter.domain.entity.{Follow, Tweet}
 import com.kijimaru.twitter.module.DBModule.DBContext
 

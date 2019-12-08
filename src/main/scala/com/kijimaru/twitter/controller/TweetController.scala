@@ -1,6 +1,9 @@
 package com.kijimaru.twitter.controller
 
-import Dao.{LikeDao, ProfileDao, RetweetDao, TweetDao}
+import com.kijimaru.twitter.domain.repository.ProfileRepository
+import com.kijimaru.twitter.domain.repository.TweetRepository
+import com.kijimaru.twitter.domain.repository.LikeRepository
+import com.kijimaru.twitter.domain.repository.RetweetRepository
 import com.kijimaru.twitter.servise.TweetService
 import com.twitter.finagle.http.{Request, RequestProxy}
 import com.twitter.finatra.http.Controller
@@ -8,11 +11,11 @@ import javax.inject.{Inject, Singleton}
 
 @Singleton
 class TweetController @Inject() (
-  profileDao: ProfileDao,
+  profileRepository: ProfileRepository,
   tweetService: TweetService,
-  likeDao: LikeDao,
-  retweetDao: RetweetDao,
-  tweetDao: TweetDao
+  likeRepository: LikeRepository,
+  retweetRepository: RetweetRepository,
+  tweetRepository: TweetRepository
 ) extends Controller {
 
   //TODO receive content as file(image,text,markdown)
@@ -27,18 +30,18 @@ class TweetController @Inject() (
   post("/tweet/:tweetId/like") { request: Request =>
     val tweetId = request.getParam("tweetId").toLong
     val userId = request.getParam("user_id").toLong
-    likeDao.like(userId, tweetId)
-    profileDao.updateLikeCount(userId, 1)
+    likeRepository.like(userId, tweetId)
+    profileRepository.updateLikeCount(userId, 1)
   }
 
   post("/tweet/:tweetId/retweet") { request: Request =>
     val tweetId = request.getParam("tweetId").toLong
     val userId = request.getParam("user_id").toLong
-    retweetDao.retweet(tweetId, userId)
-    profileDao.updateLikeCount(userId, 1)
+    retweetRepository.retweet(tweetId, userId)
+    profileRepository.updateLikeCount(userId, 1)
   }
 
   post("/tweet/seed") { request: Request =>
-    tweetDao.seed()
+    tweetRepository.seed()
   }
 }
