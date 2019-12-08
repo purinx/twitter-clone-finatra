@@ -6,7 +6,11 @@ import scala.util.Try
 
 trait UserRepository {
 
-  def create(form: UserForm): Try[Long]
+  import UserRepository._
+
+  def create(form: CreateUserRequest): Try[Long]
+
+  def findById(userId: Long): Option[User]
 
   def findByEmail(email: String): Option[User]
 
@@ -15,4 +19,19 @@ trait UserRepository {
   def update(form: UserForm): Either[String, Boolean]
 
   def authenticate(email: String, rawPassword: String): Either[String, Boolean]
+
+  def getAll(): List[User]
+
+  def setToken(userId: Long, token: String): Unit
+
+}
+
+object UserRepository {
+
+  case class CreateUserRequest(
+    id: String,
+    email: String,
+    hashedPassword: String
+  )
+
 }

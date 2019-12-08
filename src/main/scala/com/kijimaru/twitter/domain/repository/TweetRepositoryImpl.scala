@@ -1,6 +1,6 @@
 package com.kijimaru.twitter.domain.repository
 
-import com.google.inject.Inject
+import javax.inject.Inject
 import com.kijimaru.twitter.domain.entity.{Follow, Tweet}
 import com.kijimaru.twitter.module.DBModule.DBContext
 
@@ -19,7 +19,7 @@ class TweetRepositoryImpl @Inject()(ctx: DBContext) extends TweetRepository {
       for {
         followeeIds <- query[Follow].withFilter(_.userId == lift(userId)).map(_.followed)
         tweets <- query[Tweet].filter(tweet => liftQuery(followeeIds).contains(tweet.userId))
-      }
+      } yield (followeeIds, tweets)
     }
   }
 }
