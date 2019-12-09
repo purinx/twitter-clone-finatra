@@ -1,5 +1,7 @@
 package com.kijimaru.twitter.domain.entity
 
+import java.time.LocalDateTime
+
 case class Tweet(
   id: Long,
   userId: Long,
@@ -8,5 +10,5 @@ case class Tweet(
   content: String,
   liked: Long,
   retweeted: Long,
-  timestamp: String
+  timestamp: LocalDateTime
 )
