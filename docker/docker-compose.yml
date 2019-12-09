@@ -1,0 +1,11 @@
+version: '3'
+services:
+  mysql:
+    build: ./mysql/
+    volumes:
+      - ./mysql/db:/docker-entrypoint-initdb.d
+    environment:
+      - "MYSQL_DATABASE=twitter_clone"
+      - "MYSQL_ALLOW_EMPTY_PASSWORD=yes"
+    ports:
+      - "3306:3306"
