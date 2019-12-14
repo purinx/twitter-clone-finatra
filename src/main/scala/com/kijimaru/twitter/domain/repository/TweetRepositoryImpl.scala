@@ -10,24 +10,30 @@ class TweetRepositoryImpl @Inject()(ctx: DBContext) extends TweetRepository {
   import TweetRepositoryImpl._
   import ctx._
 
+  override def create()
+
   override def findById(id: Long): Option[Tweet] = {
     val record: Option[TweetRecord] = run {
       quote {
-        querySchema[TweetRecord]("tweet")
+        querySchema[TweetRecord]("tweets")
           .filter(_.id == lift(id))
       }
     }.headOption
     record.map(_.toEntity)
   }
 
-  override def findTimeline(userId:  Long): Either[String, List[Tweet]] = run {
+  override def findByFollow(userId: Long, offset: Int): List[Tweet] = run {
     quote {
-      for {
-        followeeIds <- query[Follow].withFilter(_.userId == lift(userId)).map(_.followed)
-        tweets <- query[Tweet].filter(tweet => liftQuery(followeeIds).contains(tweet.userId))
-      } yield (followeeIds, tweets)
+      (for {
+        follow <- query[Follow].withFilter(_.userId == lift(userId))
+        tweet <- querySchema[TweetRecord]("tweets")
+                    .join(_.userId == follow.followed)
+      } yield tweet)
+        .sortBy(_.id)
+        .drop(lift(offset))
+        .take(100)
     }
-  }
+  }.map(_.toEntity)
 }
 
 object TweetRepositoryImpl {

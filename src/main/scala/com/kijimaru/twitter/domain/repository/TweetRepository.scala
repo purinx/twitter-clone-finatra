@@ -1,17 +1,19 @@
 package com.kijimaru.twitter.domain.repository
 
 import com.kijimaru.twitter.domain.entity.Tweet
-import com.kijimaru.twitter.module.DBModule.DBContext
+import com.kijimaru.twitter.domain.master.ContentType
 
 trait TweetRepository {
 
-  def create(userId: Long, text: String, content: String): Unit // FIXME: もっと必要そうなので追加する
+  import TweetRepository._
+
+  def create(request: CreateTweetRequest): Unit
 
   def findById(id: Long): Option[Tweet]
 
   def findByUser(userId: Long, offset: Int): Option[Tweet]
 
-  def findByFollowing(userId: Long, offset: Int): List[Tweet]
+  def findByFollow(userId: Long, offset: Int): List[Tweet]
 
   def findTimeline(userId: Long): Either[String, List[Tweet]]
 
@@ -20,5 +22,15 @@ trait TweetRepository {
   def retweet(id: Long): Either[String, Boolean]
 
   def seed(): Unit
+
+}
+
+object TweetRepository {
+
+  case class CreateTweetRequest(
+    userId: Long,
+    text: String,
+    content: ContentType,
+  )
 
 }

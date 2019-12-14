@@ -1,24 +1,26 @@
 package com.kijimaru.twitter.domain.repository
 
 import javax.inject.Inject
-import com.kijimaru.twitter.domain.dto.UserForm
 import com.kijimaru.twitter.domain.entity.User
 import com.kijimaru.twitter.module.DBModule.DBContext
 
-import scala.util.{Failure, Success, Try}
+import scala.util.Try
 
-class UserRepositoryImpl @Inject()(ctx: DBContext) extends UserRepository {
+class UserRepositoryImpl @Inject()(
+  ctx: DBContext
+) extends UserRepository {
 
+  import UserRepository._
   import ctx._
 
-  override def create(form: UserForm): Try[Long] = Try {
+  override def create(request: CreateUserRequest): Try[Long] = Try {
     run(
       quote {
         query[User]
           .insert(
-            _.screenName -> form.screenName,
-            _.email -> form.email,
-            _.password -> form.hashedPassword
+            _.screenName -> request.screenName,
+            _.email -> request.email,
+            _.password -> request.hashedPassword
           )
           .returning(_.id)
       }
@@ -57,25 +59,17 @@ class UserRepositoryImpl @Inject()(ctx: DBContext) extends UserRepository {
     ).headOption
   }
 
-  override def update(form: UserForm): Either[String, Boolean] = form.id match {
-    case None => Left("new user")
-    case Some(id) =>
-      val result = Try(
-        run(
-          quote {
-            query[User]
-              .filter(_.id == lift(id))
-              .update(
-                _.screenName -> form.screenName,
-                _.email -> form.email,
-                _.password -> form.hashedPassword,
-              )
-          }
-        )
-      )
-      result match {
-        case Success(_) => Right(true)
-        case Failure(e) => Left(e.toString)
+  override def update(request: UpdateUserRequest): Try[Unit] = Try {
+    run(
+      quote {
+        query[User]
+          .filter(_.id == lift(request.id))
+          .update(
+            _.screenName -> request.screenName,
+            _.email -> request.email,
+            _.password -> request.hashedPassword,
+          )
       }
+    )
   }
 }
