@@ -2,7 +2,7 @@ package com.kijimaru.twitter.domain.entity
 
 case class Profile(
   userId: Long,
-  name: String,
+  screenName: String,
   bio: String,
   icon: String,
   tweets: Long,

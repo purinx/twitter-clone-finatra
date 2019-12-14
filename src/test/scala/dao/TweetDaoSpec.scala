@@ -1,5 +1,0 @@
-package dao
-
-class TweetDaoSpec {
-
-}

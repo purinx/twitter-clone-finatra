@@ -1,29 +1,37 @@
 package com.kijimaru.twitter.domain.repository
 
 import javax.inject.Inject
-import com.kijimaru.twitter.domain.dto.UserForm
 import com.kijimaru.twitter.domain.entity.User
 import com.kijimaru.twitter.module.DBModule.DBContext
 
-import scala.util.{Failure, Success, Try}
+import scala.util.Try
 
-class UserRepositoryImpl @Inject()(ctx: DBContext) extends UserRepository {
+class UserRepositoryImpl @Inject()(
+    ctx: DBContext
+) extends UserRepository {
 
+  import UserRepository._
   import ctx._
 
-  override def create(form: UserForm): Try[Long] = Try {
+  override def create(request: CreateUserRequest): Try[Long] = Try {
     run(
       quote {
         query[User]
           .insert(
-            _.screenName -> form.screenName,
-            _.email -> form.email,
-            _.password -> form.hashedPassword
+            _.name     -> lift(request.name),
+            _.email    -> lift(request.email),
+            _.password -> lift(request.hashedPassword)
           )
-          .returning(_.id)
       }
     )
   }
+
+  override def findById(id: Long): Option[User] =
+    run {
+      quote {
+        query[User].filter(_.id == lift(id))
+      }
+    }.headOption
 
   override def authenticate(email: String, rawPassword: String): Either[String, Boolean] = {
     import com.github.t3hnar.bcrypt._
@@ -36,7 +44,7 @@ class UserRepositoryImpl @Inject()(ctx: DBContext) extends UserRepository {
       }
     ).headOption
     passwordQueryResult match {
-      case None => Left("User not found.")
+      case None       => Left("User not found.")
       case Some(hash) => Right(rawPassword.isBcrypted(hash))
     }
   }
@@ -57,25 +65,17 @@ class UserRepositoryImpl @Inject()(ctx: DBContext) extends UserRepository {
     ).headOption
   }
 
-  override def update(form: UserForm): Either[String, Boolean] = form.id match {
-    case None => Left("new user")
-    case Some(id) =>
-      val result = Try(
-        run(
-          quote {
-            query[User]
-              .filter(_.id == lift(id))
-              .update(
-                _.screenName -> form.screenName,
-                _.email -> form.email,
-                _.password -> form.hashedPassword,
-              )
-          }
-        )
-      )
-      result match {
-        case Success(_) => Right(true)
-        case Failure(e) => Left(e.toString)
+  override def update(request: UpdateUserRequest): Try[Unit] = Try {
+    run(
+      quote {
+        query[User]
+          .filter(_.id == lift(request.id))
+          .update(
+            _.name     -> lift(request.name),
+            _.email    -> lift(request.email),
+            _.password -> lift(request.hashedPassword)
+          )
       }
+    )
   }
 }

@@ -1,24 +1,40 @@
 package com.kijimaru.twitter.domain.repository
 
-import com.kijimaru.twitter.domain.entity.Tweet
-import com.kijimaru.twitter.module.DBModule.DBContext
+import com.kijimaru.twitter.domain.entity.{Tweet, Retweet}
+import com.kijimaru.twitter.domain.master.ContentType
+
+import scala.util.Try
 
 trait TweetRepository {
 
-  def create(userId: Long, text: String, content: String): Unit // FIXME: もっと必要そうなので追加する
+  import TweetRepository._
+
+  def create(request: CreateTweetRequest): Try[Long]
 
   def findById(id: Long): Option[Tweet]
 
-  def findByUser(userId: Long, offset: Int): Option[Tweet]
+  def findByUserId(userId: Long, offset: Int): Option[Tweet]
 
-  def findByFollowing(userId: Long, offset: Int): List[Tweet]
+  def findByFollow(userId: Long, offset: Int): List[Tweet]
 
-  def findTimeline(userId: Long): Either[String, List[Tweet]]
+  def like(userId: Long, tweetId: Long): Try[Unit]
 
-  def like(id: Long): Either[String, Boolean]
+  def retweet(userId: Long, tweetId: Long): Either[String, Boolean]
 
-  def retweet(id: Long): Either[String, Boolean]
+  def findRetweetByUserId(userId: Long, offset: Int): List[Retweet]
+
+  def findRetweetByFollow(userId: Long, offset: Int): List[Retweet]
 
   def seed(): Unit
 
+}
+
+object TweetRepository {
+
+  case class CreateTweetRequest(
+    userId: Long,
+    text: String,
+    contentType: ContentType,
+    contentUrl: Option[String],
+  )
 }

@@ -6,4 +6,3 @@ case class Follow(
   followed: Long,
   backed: Boolean
 )
-
