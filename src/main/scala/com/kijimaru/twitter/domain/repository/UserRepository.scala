@@ -19,10 +19,6 @@ trait UserRepository {
 
   def authenticate(email: String, rawPassword: String): Either[String, Boolean]
 
-  def getAll(): List[User]
-
-  def setToken(userId: Long, token: String): Unit
-
 }
 
 object UserRepository {

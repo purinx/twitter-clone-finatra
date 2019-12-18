@@ -27,6 +27,13 @@ class UserRepositoryImpl @Inject()(
     )
   }
 
+  override def findById(id: Long): Option[User] = run {
+    quote {
+      querySchema[User]("users")
+        .filter(_.id == lift(id))
+    }
+  }.headOption
+
   override def authenticate(email: String, rawPassword: String): Either[String, Boolean] = {
     import com.github.t3hnar.bcrypt._
     val passwordQueryResult: Option[String] = run(
