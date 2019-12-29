@@ -3,11 +3,14 @@ package com.kijimaru.twitter.domain.repository
 import com.kijimaru.twitter.domain.entity.Tweet
 import com.kijimaru.twitter.domain.master.ContentType
 
+import scala.util.Try
+
 trait TweetRepository {
 
   import TweetRepository._
 
-  def create(request: CreateTweetRequest): Unit
+  def create(request: CreateTweetRequest): Try[Long]
+
 
   def findById(id: Long): Option[Tweet]
 
@@ -30,7 +33,7 @@ object TweetRepository {
   case class CreateTweetRequest(
     userId: Long,
     text: String,
-    content: ContentType,
+    contentType: ContentType,
+    contentUrl: String,
   )
-
 }

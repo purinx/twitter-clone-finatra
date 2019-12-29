@@ -2,13 +2,14 @@ package com.kijimaru.twitter.domain.entity
 
 import java.time.LocalDateTime
 
+import com.kijimaru.twitter.domain.master.ContentType
+
 case class Tweet(
   id: Long,
   userId: Long,
   userIcon: String,
   text: String,
-  content: String,
-  liked: Long,
-  retweeted: Long,
-  timestamp: LocalDateTime
+  contentType: ContentType,
+  contentUrl: String,
+  createdAt: LocalDateTime
 )
