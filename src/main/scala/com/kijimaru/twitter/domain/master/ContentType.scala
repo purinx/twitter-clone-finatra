@@ -1,6 +1,6 @@
 package com.kijimaru.twitter.domain.master
 
-case class ContentType(id: Long) {
+sealed abstract class ContentType(id: Long) {
   def getValue: Long = id
 }
 
