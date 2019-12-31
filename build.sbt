@@ -29,5 +29,3 @@ lazy val resolve = {
     "Twitter Maven" at "https://maven.twttr.com",
   )
 }
-
-unmanagedResourceDirectories in Compile += baseDirectory.value / "src" / "main" / "resources" / "view"

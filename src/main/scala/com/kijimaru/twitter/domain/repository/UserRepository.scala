@@ -1,6 +1,5 @@
 package com.kijimaru.twitter.domain.repository
 
-import com.kijimaru.twitter.domain.dto.UserForm
 import com.kijimaru.twitter.domain.entity.User
 import scala.util.Try
 
@@ -16,22 +15,24 @@ trait UserRepository {
 
   def findByToken(token: String): Option[User]
 
-  def update(form: UserForm): Either[String, Boolean]
+  def update(request: UpdateUserRequest): Try[Unit]
 
   def authenticate(email: String, rawPassword: String): Either[String, Boolean]
-
-  def getAll(): List[User]
-
-  def setToken(userId: Long, token: String): Unit
 
 }
 
 object UserRepository {
 
   case class CreateUserRequest(
-    id: String,
     email: String,
+    name: String,
     hashedPassword: String
   )
 
+  case class UpdateUserRequest(
+    id: Long,
+    email: String,
+    name: String,
+    hashedPassword: String,
+  )
 }

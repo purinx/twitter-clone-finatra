@@ -1,4 +1,9 @@
 package com.kijimaru.twitter.domain.entity
 
-
-case class Retweet(id: Long, tweetId: Long, userId: Long, timestamp: String)
+case class Retweet(
+  id: Long,
+  tweet: Tweet,
+  userId: Long,
+  timestamp: String
+)
+ 
